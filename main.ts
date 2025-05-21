@@ -9,4 +9,23 @@ const server = new McpServer({
 
 //hay diferentes cosas que puede tener un servidor MCP. Por ejemplo tools.
 //tambien puede tener prompts y recursos.
-
+//las herramientas son funciones que el servidor puede ejecutar.
+//los prompts son preguntas que el servidor puede hacer al cliente.
+//los recursos son datos que el servidor puede enviar al cliente.
+server.tool(
+    'Pronostico',
+    'Pronostico del tiempo de una ciudad',
+    {
+        city: z.string().describe('Ciudad a consultar')
+    },
+    async ({ city }) => {
+        return {
+            content: [
+                {
+                    type: 'text',
+                    text: `El pronostico del tiempo para ${city} es soleado.`
+                }
+            ]
+        }
+    }
+)
