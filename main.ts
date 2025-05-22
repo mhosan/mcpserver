@@ -1,4 +1,5 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 
 //crear el servidor. Es la interfaz con el protocolo MCP entre el cliente y el servidor.
@@ -29,3 +30,7 @@ server.tool(
         }
     }
 )
+
+//escuchar las conexiones de los clientes
+const transport = new StdioServerTransport();//StdioServerTransport conecta tu servidor MCP con clientes usando la terminal, ideal para pruebas, desarrollo o integración con otros procesos
+await server.connect(transport);
