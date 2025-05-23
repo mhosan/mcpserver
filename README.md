@@ -26,5 +26,11 @@ Este proyecto es una aplicación de ejemplo en TypeScript que utiliza:
 ## Notas
 - Tener Node.js y pnpm instalados.
 - El archivo `.gitignore` ya está configurado para ignorar archivos innecesarios.
+- Ejecutar Inspector: 
+```powershell
+npx -y @modelcontextprotocol/inspector npx -y tsx main.ts
+```
+
+---
 
 ---

@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node --loader ts-node/esm main.ts",
+    "start": "npx -y tsx main.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -21,3 +21,4 @@
     "typescript": "^5.8.3"
   }
 } 
+ 
