@@ -28,9 +28,5 @@ Este proyecto es una aplicación de ejemplo en TypeScript que utiliza:
 - El archivo `.gitignore` ya está configurado para ignorar archivos innecesarios.
 - Ejecutar Inspector: 
 ```powershell
-npx -y @modelcontextprotocol/inspector npx -y tsx main.ts
+    npx -y @modelcontextprotocol/inspector npx -y tsx main.ts
 ```
-
----
-
----
