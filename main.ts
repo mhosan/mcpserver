@@ -76,6 +76,7 @@ const parseJsonBody = (req: any, callback: (body: any) => void) => {
 
 // Crear un servidor HTTP
 const httpServer = createServer((req, res) => {
+    console.log(`Received request: ${req.method} ${req.url}`);
     parseJsonBody(req, (body)=>{
         transport.handleRequest(req, res, body);
     })
@@ -84,7 +85,7 @@ const httpServer = createServer((req, res) => {
 // Conectar el servidor MCP al transporte
 await server.connect(transport);
 
-const port = process.env.PORT || 6274;
+const port = process.env.PORT || 3000;
 httpServer.listen(port, () => {
     console.log(`Servidor MCP escuchando en http://localhost:${port}`);
 });
