@@ -23,7 +23,7 @@ server.tool(
     {
         city: z.string().describe('Ciudad a consultar') 
     },
-    async ({ city }) => {
+    async ({ city }: { city: string }) => {
         const response = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=10&language=es&format=json`);
         const data = await response.json();
 
@@ -61,7 +61,7 @@ const transport = new StreamableHTTPServerTransport({
 // Middleware para parsear JSON
 const parseJsonBody = (req: any, callback: (body: any) => void) => {
     let body = '';
-    req.on('data', chunk => {
+    req.on('data', (chunk: { toString: () => string; }) => {
         body += chunk.toString();
     });
     req.on('end', () => {
@@ -89,4 +89,3 @@ const port = process.env.PORT || 3000;
 httpServer.listen(port, () => {
     console.log(`Servidor MCP escuchando en http://localhost:${port}`);
 });
-
