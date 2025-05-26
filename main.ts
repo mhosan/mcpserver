@@ -1,6 +1,10 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { createServer} from 'http';
 import { z } from 'zod';
+
+
 
 //crear el servidor. Es la interfaz con el protocolo MCP entre el cliente y el servidor.
 const server = new McpServer({
@@ -47,8 +51,41 @@ server.tool(
             ]
         }
     }
-)
+);
 
-//escuchar las conexiones de los clientes
-const transport = new StdioServerTransport();//StdioServerTransport conecta tu servidor MCP con clientes usando la terminal, ideal para pruebas, desarrollo o integración con otros procesos
+// Configurar el transporte HTTP en modo sin estado (stateless)
+const transport = new StreamableHTTPServerTransport({
+    sessionIdGenerator: undefined // Modo sin estado
+});
+
+// Middleware para parsear JSON
+const parseJsonBody = (req: any, callback: (body: any) => void) => {
+    let body = '';
+    req.on('data', chunk => {
+        body += chunk.toString();
+    });
+    req.on('end', () => {
+        try {
+            const parsedBody = body ? JSON.parse(body) : {};
+            callback(parsedBody);
+        } catch (e) {
+            callback(null);
+        }
+    });
+};
+
+// Crear un servidor HTTP
+const httpServer = createServer((req, res) => {
+    parseJsonBody(req, (body)=>{
+        transport.handleRequest(req, res, body);
+    })
+});
+
+// Conectar el servidor MCP al transporte
 await server.connect(transport);
+
+const port = process.env.PORT || 6274;
+httpServer.listen(port, () => {
+    console.log(`Servidor MCP escuchando en http://localhost:${port}`);
+});
+
