@@ -89,6 +89,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Parsear el cuerpo de la solicitud
   let body = await parseJsonBody(req);
 
+  // Log para depuración
+  console.log('Body recibido:', JSON.stringify(body));
+  // No hay método público para listar herramientas, pero podemos loguear el nombre de la herramienta registrada manualmente
+  console.log('Herramienta registrada: Pronostico');
+
   // Adaptar formatos simples a JSON-RPC si es necesario
   if (body && body.tool && body.input) {
     body = {
@@ -97,6 +102,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       method: body.tool,
       params: body.input
     };
+    console.log('Body adaptado a JSON-RPC:', JSON.stringify(body));
   }
 
   // Manejar la solicitud con el transporte MCP
