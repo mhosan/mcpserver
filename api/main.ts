@@ -96,13 +96,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   // Adaptar formatos simples a JSON-RPC si es necesario
   if (body && body.tool && body.input) {
-    body = {
+    const nuevoBody = {
       jsonrpc: "2.0",
       id: 1,
       method: body.tool,
       params: body.input
     };
-    console.log('Body adaptado a JSON-RPC:', JSON.stringify(body));
+    console.log('Body adaptado a JSON-RPC:', JSON.stringify(nuevoBody));
+    body = nuevoBody;
   }
 
   // Manejar la solicitud con el transporte MCP
