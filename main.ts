@@ -76,7 +76,7 @@ const parseJsonBody = (req: any, callback: (body: any) => void) => {
 
 // Crear un servidor HTTP
 const httpServer = createServer((req, res) => {
-    console.log(`Received request: ${req.method} ${req.url}`);
+    console.log(`Received request: ${req.method} ${req.url}`); //req: IncomingMessage
     parseJsonBody(req, (body)=>{
         transport.handleRequest(req, res, body);
     })
