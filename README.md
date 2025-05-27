@@ -30,4 +30,4 @@ Este proyecto es una aplicación de ejemplo en TypeScript que utiliza:
 ```powershell
   npx -y @modelcontextprotocol/inspector npx -y tsx main.ts
 ```
-- deploy en Vercel
+- deploy en Vercel luego de eliminar pnpm
