@@ -87,7 +87,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   await initializeServer();
 
   // Parsear el cuerpo de la solicitud
-  const body = await parseJsonBody(req);
+  let body = await parseJsonBody(req);
+
+  // Adaptar formatos simples a JSON-RPC si es necesario
+  if (body && body.tool && body.input) {
+    body = {
+      jsonrpc: "2.0",
+      id: 1,
+      method: body.tool,
+      params: body.input
+    };
+  }
 
   // Manejar la solicitud con el transporte MCP
   await transport.handleRequest(req, res, body);
