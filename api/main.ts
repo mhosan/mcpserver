@@ -92,7 +92,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Log para depuración
   console.log('Body recibido:', JSON.stringify(body));
   // No hay método público para listar herramientas, pero podemos loguear el nombre de la herramienta registrada manualmente
-  console.log('Herramienta registrada: Pronostico');
+  console.log('Herramienta registrada: Test');
 
   // Adaptar formatos simples a JSON-RPC si es necesario
   if (body && body.tool && body.input) {
