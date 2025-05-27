@@ -11,7 +11,7 @@ const server = new McpServer({
 
 // Definir la herramienta Pronostico
 server.tool(
-  'Pronostico',
+  'Test',
   'Pronostico del tiempo de una ciudad',
   {
     city: z.string().describe('Ciudad a consultar'),
