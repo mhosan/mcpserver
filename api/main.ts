@@ -11,6 +11,10 @@ async function getMcpServer() {
   const server = new McpServer({
     name: 'MyServer',
     version: '1.0.0'
+  },{ 
+      capabilities : { 
+          tools : {} 
+      } 
   });
 
 
@@ -103,14 +107,17 @@ app.post('/mcp', async (req, res) => {
     console.log('Creando instancia del servidor MCP y registrando herramientas...');
     const server = await getMcpServer();
     console.log('Instancia del servidor MCP creada y herramientas registradas.');
+
     const transport: StreamableHTTPServerTransport = new StreamableHTTPServerTransport({
       sessionIdGenerator: undefined
     });
+    
     res.on('close', () => {
       console.log('Request closed');
       transport.close();
       server.close();
     });
+
     console.log('conectar el server...');
     await server.connect(transport);
     console.log('Recibido req.body:', req.body);
