@@ -6,15 +6,22 @@ import express from 'express';
 function getServer() {
   const server = new McpServer({
     name: 'MyServer',
-    version: '1.0.0',
+    version: '1.0.0'
   });
 
   server.tool(
     "pronostico",
     {
-      city: z.string().describe('Ciudad a consultar'),
+      title: "Pronóstico del tiempo",
+      description: "Obtiene el pronóstico del tiempo para una ciudad",
+      paramsSchema: z.object({
+        city: z.string().describe("Ciudad a consultar")
+      })
     },
-    async ({ city }: { city: string }) => {
+    async (args) => {
+      console.log('Tool called with args:', args);
+      const { params } = args;
+      const city = params.city;
       const response = await fetch(
         `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=10&language=es&format=json`
       );
@@ -40,10 +47,9 @@ function getServer() {
             type: 'text',
             text: JSON.stringify(weatherData, null, 2),
           },
-        ],
-      };
-    }
-  );
+        ],      };
+    });
+  
   return server;
 }
 
@@ -52,22 +58,34 @@ app.use(express.json());
 
 app.post('/mcp', async (req, res) => {
   try {
+    console.log('Headers:', req.headers);
+    console.log('Request body:', JSON.stringify(req.body, null, 2));
+    
     const server = getServer();
+    console.log('Server created');
+    
     const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+    console.log('Transport created');
+    
     res.on('close', () => {
       transport.close();
       server.close();
+      console.log('Connection closed');
     });
+
     await server.connect(transport);
-    await transport.handleRequest(req, res, req.body);
-  } catch (error) {
+    console.log('Server connected to transport');
+    
+    await transport.handleRequest(req, res, req.body);} catch (error) {
     console.error('Error handling MCP request:', error);
+    console.error('Error details:', JSON.stringify(error, null, 2));
     if (!res.headersSent) {
       res.status(500).json({
         jsonrpc: '2.0',
         error: {
           code: -32603,
-          message: 'Internal server error',
+          message: error instanceof Error ? error.message : 'Internal server error',
+          data: error instanceof Error ? error.stack : undefined
         },
         id: null,
       });
@@ -78,7 +96,7 @@ app.post('/mcp', async (req, res) => {
 app.get('/mcp', (req, res) => {
   res.status(405).json({
     jsonrpc: '2.0',
-    error: { code: -32000, message: 'Method not allowed.' },
+    error: { code: -32000, message: 'Method not allowed carajo!.' },
     id: null,
   });
 });
