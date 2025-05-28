@@ -8,9 +8,9 @@ function getServer() {
     name: 'MyServer',
     version: '1.0.0',
   });
+
   server.tool(
-    'pronostico',
-    'Pronostico meteorologico de una ciudad',
+    "pronostico",
     {
       city: z.string().describe('Ciudad a consultar'),
     },
