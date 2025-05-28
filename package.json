@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node dist/api/main.js",
-    "dev": "vercel dev",
+    "start-dev": "npx -y tsx api/main.ts",
+    "dev": "nodemon --watch api --ext ts,js,json --exec npm run start-dev",
     "build": "tsc"
   },
   "keywords": [],
@@ -24,6 +25,7 @@
     "@types/express": "^5.0.2",
     "@types/node": "^22.15.21",
     "@vercel/node": "^5.1.16",
+    "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }
