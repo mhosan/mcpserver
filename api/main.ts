@@ -13,14 +13,15 @@ async function getMcpServer() {
     version: '1.0.0'
   });
 
+
   // Registrar la herramienta
   server.tool(
-    "pronostico",
+    "test",
     "description: Obtiene el pronóstico del tiempo para una ciudad",
     {
-      city: z.enum(["ciudad"])
+      city: z.string()
     },
-    async ({city}) => {
+    async ({ city }) => {
       console.log('Tool pronostico called with city:', city);
       const response = await fetch(
         `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=10&language=es&format=json`
@@ -41,7 +42,9 @@ async function getMcpServer() {
       const weatherResponse = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m&current=temperature_2m,is_day,precipitation,rain&forecast_days=1`
       );
+      console.log('weatherResponse:', weatherResponse);
       const weatherData = await weatherResponse.json();
+      console.log('weatherData before stringify:', weatherData);
       return {
         content: [
           {
@@ -52,6 +55,44 @@ async function getMcpServer() {
       };
     }
   );
+
+  server.tool(
+    "echo",
+    "description: Eco de la ciudad recibida",
+    {
+      city: z.string()
+    },
+    async ({ city }) => {
+      console.log('*** Inicio de ejecución de la herramienta echo ***');
+      console.log('Ciudad recibida en echo:', city);
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `Eco: ${city}`,
+          },
+        ],
+      };
+    }
+  );
+
+  server.tool(
+    "ping",
+    "description: Responde con pong",
+    {},
+    async () => {
+      console.log('Tool ping called');
+      return {
+        content: [
+          {
+            type: 'text',
+            text: 'pong',
+          },
+        ],
+      };
+    }
+  );
+
   return server;
 }
 
@@ -59,8 +100,10 @@ async function getMcpServer() {
 app.post('/mcp', async (req, res) => {
   try {
     // Create a new server instance for each request
+    console.log('Creando instancia del servidor MCP y registrando herramientas...');
     const server = await getMcpServer();
-    const transport: StreamableHTTPServerTransport  = new StreamableHTTPServerTransport({ 
+    console.log('Instancia del servidor MCP creada y herramientas registradas.');
+    const transport: StreamableHTTPServerTransport = new StreamableHTTPServerTransport({
       sessionIdGenerator: undefined
     });
     res.on('close', () => {
@@ -68,7 +111,9 @@ app.post('/mcp', async (req, res) => {
       transport.close();
       server.close();
     });
+    console.log('conectar el server...');
     await server.connect(transport);
+    console.log('Recibido req.body:', req.body);
     await transport.handleRequest(req, res, req.body);
 
   } catch (error) {
