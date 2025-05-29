@@ -20,15 +20,9 @@ async function getMcpServer() {
   // Registrar la herramienta
   server.tool(
     "test",
-    "description: Obtiene el pronóstico del tiempo para una ciudad",
-    {
-      schema: z.object({
-        city: z.string().describe("Ciudad a consultar")
-      })
-    }, 
-    async (args: any, extra: any) => {
-      console.log('Tool pronostico called with args:', args);
-      const city = args.city;
+    { city: z.string().describe("Ciudad a consultar") },
+    async ({ city }) => {
+      console.log('Tool pronostico called with city:', city);
       if (!city) {
         throw new Error('Ciudad no especificada');
       }
@@ -64,15 +58,11 @@ async function getMcpServer() {
       };
     }
   );
-  server.tool("echo",
-    "description: Eco de la ciudad recibida",
-    {
-      schema: z.object({
-        city: z.string().describe("Ciudad a consultar")
-      })
-    }, async (args: any, extra: any) => {
+  server.tool(
+    "echo",
+    { city: z.string().describe("Ciudad a consultar") },
+    async ({ city }) => {
       console.log('*** Inicio de ejecución de la herramienta echo ***');
-      const city = args.city;
       console.log('Ciudad recibida en echo:', city);
       return {
         content: [
@@ -84,10 +74,10 @@ async function getMcpServer() {
       };
     }
   );
-
-  server.tool("ping",
-    "description: Responde con pong",
-    {}, async (args: any, extra: any) => {
+  server.tool(
+    "ping",
+    {},
+    async () => {
       console.log('Tool ping called');
       return {
         content: [
