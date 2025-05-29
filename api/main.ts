@@ -55,7 +55,7 @@ async function createAndConfigureMcpServer() {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(weatherData, null, 2), // Stringify for better display
+              text: weatherData
             },
           ],
         };
