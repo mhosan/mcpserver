@@ -119,6 +119,17 @@ async function createAndConfigureMcpServer() {
  */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.log('Vercel function handler received request.');
+    console.log('Request Method:', req.method); // Aquí puedes ver el método
+
+    // Opcional: Implementar manejo de métodos específicos si es necesario
+    if (req.method !== 'POST') { // Asumiendo que solo POST es soportado para el protocolo MCP
+        res.status(405).json({
+            jsonrpc: '2.0',
+            error: { code: -32000, message: 'Method not allowed' },
+            id: req.body?.id || null // Intentar usar el ID si está en el cuerpo
+        });
+        return; // Terminar la ejecución para este método
+    }
 
     try {
         console.log('Initializing MCP server and transport for this request...');
