@@ -111,7 +111,12 @@ async function createAndConfigureMcpServer() {
   return server;
 }
 
-// Export the serverless function handler
+/**
+ * 
+ * Export the serverless function handler. Código adaptado para Vercel. Se eliminó Express
+ * @param req 
+ * @param res 
+ */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.log('Vercel function handler received request.');
 
