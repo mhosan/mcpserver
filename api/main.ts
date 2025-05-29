@@ -40,14 +40,11 @@ async function getMcpServer() {
           ],
         };
       }
-      console.log('Geocoding data:', data);
       const { latitude, longitude } = data.results[0];
       const weatherResponse = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m&current=temperature_2m,is_day,precipitation,rain&forecast_days=1`
       );
-      console.log('weatherResponse:', weatherResponse);
       const weatherData = await weatherResponse.json();
-      console.log('weatherData before stringify:', weatherData);
       return {
         content: [
           {
