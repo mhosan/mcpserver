@@ -11,22 +11,27 @@ async function getMcpServer() {
   const server = new McpServer({
     name: 'MyServer',
     version: '1.0.0'
-  },{ 
-      capabilities : { 
-          tools : {} 
-      } 
+  }, {
+    capabilities: {
+      tools: {}
+    }
   });
-
 
   // Registrar la herramienta
   server.tool(
     "test",
     "description: Obtiene el pronóstico del tiempo para una ciudad",
     {
-      city: z.string()
-    },
-    async ({ city }) => {
-      console.log('Tool pronostico called with city:', city);
+      schema: z.object({
+        city: z.string().describe("Ciudad a consultar")
+      })
+    }, 
+    async (args: any, extra: any) => {
+      console.log('Tool pronostico called with args:', args);
+      const city = args.city;
+      if (!city) {
+        throw new Error('Ciudad no especificada');
+      }
       const response = await fetch(
         `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=10&language=es&format=json`
       );
@@ -59,15 +64,15 @@ async function getMcpServer() {
       };
     }
   );
-
-  server.tool(
-    "echo",
+  server.tool("echo",
     "description: Eco de la ciudad recibida",
     {
-      city: z.string()
-    },
-    async ({ city }) => {
+      schema: z.object({
+        city: z.string().describe("Ciudad a consultar")
+      })
+    }, async (args: any, extra: any) => {
       console.log('*** Inicio de ejecución de la herramienta echo ***');
+      const city = args.city;
       console.log('Ciudad recibida en echo:', city);
       return {
         content: [
@@ -80,11 +85,9 @@ async function getMcpServer() {
     }
   );
 
-  server.tool(
-    "ping",
+  server.tool("ping",
     "description: Responde con pong",
-    {},
-    async () => {
+    {}, async (args: any, extra: any) => {
       console.log('Tool ping called');
       return {
         content: [
@@ -103,15 +106,15 @@ async function getMcpServer() {
 
 app.post('/mcp', async (req, res) => {
   try {
-    // Create a new server instance for each request
     console.log('Creando instancia del servidor MCP y registrando herramientas...');
     const server = await getMcpServer();
     console.log('Instancia del servidor MCP creada y herramientas registradas.');
 
-    const transport: StreamableHTTPServerTransport = new StreamableHTTPServerTransport({
+    const transport = new StreamableHTTPServerTransport({
       sessionIdGenerator: undefined
     });
-    
+
+    // Configurar el evento close antes de la conexión
     res.on('close', () => {
       console.log('Request closed');
       transport.close();
@@ -121,6 +124,7 @@ app.post('/mcp', async (req, res) => {
     console.log('conectar el server...');
     await server.connect(transport);
     console.log('Recibido req.body:', req.body);
+
     await transport.handleRequest(req, res, req.body);
 
   } catch (error) {
