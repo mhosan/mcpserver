@@ -19,7 +19,7 @@ async function getMcpServer() {
 
   // Registrar la herramienta
   server.tool(
-    "test",
+    "pronostico",
     { city: z.string().describe("Ciudad a consultar") },
     async ({ city }) => {
       console.log('Tool pronostico called with city:', city);
@@ -45,16 +45,18 @@ async function getMcpServer() {
         `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m&current=temperature_2m,is_day,precipitation,rain&forecast_days=1`
       );
       const weatherData = await weatherResponse.json();
+      console.log(weatherData);
       return {
         content: [
           {
             type: 'text',
-            text: JSON.stringify(weatherData, null, 2),
+            text: weatherData,
           },
         ],
       };
     }
   );
+
   server.tool(
     "echo",
     { city: z.string().describe("Ciudad a consultar") },
@@ -71,6 +73,7 @@ async function getMcpServer() {
       };
     }
   );
+
   server.tool(
     "ping",
     {},
