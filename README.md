@@ -9,28 +9,25 @@ Este proyecto es una aplicación de ejemplo en TypeScript que utiliza:
 
 - Instalar dependencias:
   ```powershell
-  pnpm install
+  npm install
   ```
 - Ejecutar el proyecto:
   ```powershell
-  pnpm start
+  npm start
   ```
 
 ## Estructura básica
 
 - `main.ts`: Código principal del servidor MCP.
 - `package.json`: Configuración del proyecto y dependencias.
-- `pnpm-lock.yaml`: Archivo de bloqueo de dependencias generado por pnpm.
+- `package-lock.json`: Archivo de bloqueo de dependencias generado por npm.
 - `.gitignore`: Archivos y carpetas ignorados por Git.
 
 ## Notas
-- Tener Node.js y pnpm instalados.
+- Tener Node.js y npm instalados.
 - El archivo `.gitignore` ya está configurado para ignorar archivos innecesarios.
-- Ejecutar Inspector: 
+- Ejecutar Inspector para testear en local: 
 ```powershell
-npx -y @modelcontextprotocol/inspector npx -y tsx main.ts
+  npx -y @modelcontextprotocol/inspector npx -y tsx main.ts
 ```
-
----
-
----
+- deploy en Vercel luego de eliminar pnpm

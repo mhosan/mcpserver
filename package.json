@@ -5,18 +5,26 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "npx -y tsx main.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node dist/api/main.js",
+    "start-dev": "npx -y tsx api/main.ts",
+    "dev": "nodemon --watch api --ext ts,js,json --exec npm run start-dev",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "npm@10.11.0",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.11.5",
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "D": "^1.0.0",
+    "express": "^5.1.0",
     "zod": "^3.25.17"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.18",
+    "@types/express": "^5.0.2",
+    "@types/node": "^22.15.21",
+    "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }

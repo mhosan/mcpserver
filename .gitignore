@@ -7,7 +7,6 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
 
 # Build output
 dist/
@@ -34,3 +33,4 @@ coverage/
 # Optional: local test databases
 *.sqlite
 *.db
+.vercel
