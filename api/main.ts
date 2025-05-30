@@ -2,12 +2,6 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { z } from 'zod';
-import express from 'express';
-import cors from 'cors';
-
-const app = express();
-app.use(cors());
-app.use(express.json());
 
 // Async function to create and configure an MCP server instance
 async function createAndConfigureMcpServer() {
@@ -124,6 +118,17 @@ async function createAndConfigureMcpServer() {
  * @param res 
  */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+    // Configurar CORS manualmente para serverless
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    // Manejar preflight (OPTIONS)
+    if (req.method === 'OPTIONS') {
+        res.status(200).end();
+        return;
+    }
+
     console.log('Vercel function handler received request.');
     console.log('Request Method:', req.method); // Aquí puedes ver el método
 
