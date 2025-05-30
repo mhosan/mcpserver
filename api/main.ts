@@ -2,8 +2,10 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { z } from 'zod';
 import express from 'express';
+import cors from 'cors';
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 // Async function to create and configure an MCP server instance
