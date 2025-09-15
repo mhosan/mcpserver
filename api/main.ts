@@ -9,7 +9,7 @@ async function createAndConfigureMcpServer() {
     name: 'MyServer',
     version: '1.0.0'
   }, {
-    capabilities: {
+    capabilities: { 
       tools: {}
     }
   });
