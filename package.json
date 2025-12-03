@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node dist/api/main.js",
     "start-dev": "npx -y tsx api/main.ts",
-    "dev": "nodemon --watch api --ext ts,js,json --exec npm run start-dev",
+    "dev": "nodemon --watch api --ext ts,js,json --exec npx tsx api/local.ts",
     "build": "tsc"
   },
   "keywords": [],
